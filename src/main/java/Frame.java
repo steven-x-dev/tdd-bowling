@@ -16,11 +16,11 @@ class Frame {
             "you can't strike down more pins than what's in this frame";
 
 
-    private int remainingBalls;
-    private int[] scores;
-    private int currThrow;
-    private boolean throwComplete;
-    private int remainingScoringThrows;
+    protected int remainingBalls;
+    protected int[] scores;
+    protected int currThrow;
+    protected boolean throwComplete;
+    protected int remainingScoringThrows;
 
 
     Frame() {

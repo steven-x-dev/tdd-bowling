@@ -126,4 +126,17 @@ class FrameTest {
                 THROW_MORE_THAN_TWO_TIMES_MSG);
     }
 
+
+    @Test
+    void should_construct_empty_frame_given_last_frame() {
+
+        Frame expected = new LastFrame();
+
+        assertEquals(expected.getRemainingBalls(), TOTAL_PINS);
+        assertEquals(expected.getCurrThrow(), 0);
+        assertFalse(expected.isThrowComplete());
+        assertEquals(expected.getRemainingScoringThrows(), -1);
+        assertArrayEquals(expected.getScores(), new int[] { -1, -1, -1 });
+    }
+
 }
