@@ -1,58 +1,24 @@
-class Frame {
+class Frame extends AbstractFrame {
+
+    private static final int MAX_THROWS = 2;
+
+    private static final int ADDITIONAL_SCORING_THROWS_FOR_STRIKE = 2;
+    private static final int ADDITIONAL_SCORING_THROWS_FOR_SPARE = 1;
+    private static final int ADDITIONAL_SCORING_THROWS_FOR_FAILED = 0;
 
 
-    protected static final int TOTAL_PINS = 10;
-    protected static final int ADDITIONAL_SCORING_THROWS_FOR_STRIKE = 2;
-    protected static final int ADDITIONAL_SCORING_THROWS_FOR_SPARE = 1;
-    protected static final int ADDITIONAL_SCORING_THROWS_FOR_FAILED = 0;
-
-    protected static final String THROW_MORE_THAN_TWO_TIMES_MSG =
-            "you can't continue a frame which has already been completed";
-
-    protected static final String STRIKING_NEGATIVE_PINS_MSG =
-            "you can't strike down a negative number of pins";
-
-    protected static final String STRIKING_TOO_MANY_PINS_MSG =
-            "you can't strike down more pins than what's in this frame";
-
-
-    protected int remainingBalls;
-    protected int[] scores;
-    protected int currThrow;
-    protected boolean throwComplete;
-    protected int remainingScoringThrows;
+    private int remainingScoringThrows;
 
 
     Frame() {
-        remainingBalls = TOTAL_PINS;
+        super();
         scores = new int[] { -1, -1 };
-        currThrow = 0;
-        throwComplete = false;
         remainingScoringThrows = -1;
     }
 
 
-    int getRemainingBalls() {
-        return remainingBalls;
-    }
-
-    int[] getScores() {
-        return scores;
-    }
-
-    int getCurrThrow() {
-        return currThrow;
-    }
-
-    boolean isThrowComplete() {
-        return throwComplete;
-    }
-
-    int getRemainingScoringThrows() {
-        return remainingScoringThrows;
-    }
-
-    void throwBall(int pinsDown) {
+    @Override
+    protected void throwBall(int pinsDown) {
 
         checkInput(pinsDown);
 
@@ -72,26 +38,13 @@ class Frame {
     }
 
 
-    protected void checkInput(int pinsDown) {
-        if (throwComplete)
-            throw new IllegalStateException(THROW_MORE_THAN_TWO_TIMES_MSG);
-
-        if (pinsDown < 0)
-            throw new IllegalArgumentException(STRIKING_NEGATIVE_PINS_MSG);
-
-        if (pinsDown > remainingBalls)
-            throw new IllegalArgumentException(STRIKING_TOO_MANY_PINS_MSG);
-    }
-
-
-    protected void strike(int pinsDown) {
-        remainingBalls -= pinsDown;
-        scores[currThrow] = pinsDown;
-        currThrow++;
-    }
-
-
+    @Override
     protected boolean checkFrameComplete() {
-        return remainingBalls == 0 || currThrow == 2;
+        return remainingBalls == 0 || currThrow == MAX_THROWS;
+    }
+
+
+    int getRemainingScoringThrows() {
+        return remainingScoringThrows;
     }
 }

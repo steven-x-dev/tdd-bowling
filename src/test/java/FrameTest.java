@@ -6,11 +6,12 @@ class FrameTest {
 
 
     private static final int TOTAL_PINS = 10;
+
     private static final int ADDITIONAL_SCORING_THROWS_FOR_STRIKE = 2;
     private static final int ADDITIONAL_SCORING_THROWS_FOR_SPARE = 1;
     private static final int ADDITIONAL_SCORING_THROWS_FOR_FAILED = 0;
 
-    private static final String THROW_MORE_THAN_TWO_TIMES_MSG =
+    private static final String THROW_MORE_THAN_ALLOWED_TIMES_MSG =
             "you can't continue a frame which has already been completed";
 
     private static final String STRIKING_NEGATIVE_PINS_MSG =
@@ -89,7 +90,7 @@ class FrameTest {
 
         Frame expected = new Frame();
 
-        assertThrows(IllegalStateException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> expected.throwBall(-1),
                 STRIKING_NEGATIVE_PINS_MSG);
     }
@@ -101,13 +102,13 @@ class FrameTest {
         Frame expected1 = new Frame();
         expected1.throwBall(5);
 
-        assertThrows(IllegalStateException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> expected1.throwBall(6),
                 STRIKING_TOO_MANY_PINS_MSG);
 
         Frame expected2 = new Frame();
 
-        assertThrows(IllegalStateException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> expected2.throwBall(11),
                 STRIKING_TOO_MANY_PINS_MSG);
     }
@@ -123,19 +124,18 @@ class FrameTest {
 
         assertThrows(IllegalStateException.class,
                 () -> expected.throwBall(2),
-                THROW_MORE_THAN_TWO_TIMES_MSG);
+                THROW_MORE_THAN_ALLOWED_TIMES_MSG);
     }
 
 
     @Test
     void should_construct_empty_frame_given_last_frame() {
 
-        Frame expected = new LastFrame();
+        LastFrame expected = new LastFrame();
 
         assertEquals(expected.getRemainingBalls(), TOTAL_PINS);
         assertEquals(expected.getCurrThrow(), 0);
         assertFalse(expected.isThrowComplete());
-        assertEquals(expected.getRemainingScoringThrows(), -1);
         assertArrayEquals(expected.getScores(), new int[] { -1, -1, -1 });
     }
 
@@ -143,7 +143,7 @@ class FrameTest {
     @Test
     void should_construct_three_strikes_given_last_frame() {
 
-        Frame expected = new LastFrame();
+        LastFrame expected = new LastFrame();
 
         expected.throwBall(TOTAL_PINS);
 

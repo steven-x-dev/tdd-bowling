@@ -1,12 +1,15 @@
-class LastFrame extends Frame {
+class LastFrame extends AbstractFrame {
 
+    private static final int MAX_THROWS = 3;
 
     LastFrame() {
+        super();
         scores = new int[] { -1, -1, -1 };
     }
 
 
-    void throwBall(int pinsDown) {
+    @Override
+    protected void throwBall(int pinsDown) {
 
         checkInput(pinsDown);
 
@@ -14,7 +17,7 @@ class LastFrame extends Frame {
 
         throwComplete = checkFrameComplete();
 
-        if (remainingBalls == 0 && currThrow < 3) {
+        if (remainingBalls == 0 && currThrow < MAX_THROWS) {
             remainingBalls = TOTAL_PINS;
         }
     }
@@ -22,8 +25,8 @@ class LastFrame extends Frame {
 
     @Override
     protected boolean checkFrameComplete() {
-        return (currThrow == 3 ||
-                (currThrow == 2 && remainingBalls > 0));
+        return (currThrow == MAX_THROWS ||
+                (currThrow == (MAX_THROWS - 1) && remainingBalls > 0));
     }
 
 }
