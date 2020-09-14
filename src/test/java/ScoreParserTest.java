@@ -8,16 +8,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class ScoreParserTest {
 
 
-    private static final String INPUT_1 = "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
-    private static final String INPUT_2 = "10,10,10,10,10,10,10,10,10,10,10,10";
+    private static final String[] INPUTS = {
+            "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+            "10,10,10,10,10,10,10,10,10,10,10,10"
+    };
     
     
     @Test
     void should_all_frames_complete_and_scores_added_given_line_input() {
-        should_all_frames_complete_and_scores_added_given_line_input(INPUT_1);
-        should_all_frames_complete_and_scores_added_given_line_input(INPUT_2);
+        for (String input : INPUTS) {
+            should_all_frames_complete_and_scores_added_given_line_input(input);
+        }
     }
-    
+
     private void should_all_frames_complete_and_scores_added_given_line_input(String input) {
 
         List<AbstractFrame> frames = ScoreParser.parseLineIntoFrames(input);
