@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class FrameTest {
 
 
@@ -44,7 +45,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 1);
         assertTrue(expected.isThrowComplete());
         assertEquals(expected.getRemainingScoringThrows(), ADDITIONAL_SCORING_THROWS_FOR_STRIKE);
-        assertArrayEquals(expected.getScores(), new int[]{ TOTAL_PINS, -1 });
+        assertArrayEquals(expected.getScores(), new int[] { TOTAL_PINS, -1 });
     }
 
 
@@ -115,6 +116,19 @@ class FrameTest {
 
 
     @Test
+    void should_throw_illegal_state_exception_when_throw_after_strike() {
+
+        Frame expected = new Frame();
+
+        expected.throwBall(TOTAL_PINS);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected.throwBall(2),
+                THROW_MORE_THAN_ALLOWED_TIMES_MSG);
+    }
+
+
+    @Test
     void should_throw_illegal_state_exception_when_throw_three_times() {
 
         Frame expected = new Frame();
@@ -150,21 +164,203 @@ class FrameTest {
         assertEquals(expected.getRemainingBalls(), TOTAL_PINS);
         assertEquals(expected.getCurrThrow(), 1);
         assertFalse(expected.isThrowComplete());
-        assertArrayEquals(expected.getScores(), new int[]{ TOTAL_PINS, -1, -1 });
+        assertArrayEquals(expected.getScores(), new int[] { TOTAL_PINS, -1, -1 });
 
         expected.throwBall(TOTAL_PINS);
 
         assertEquals(expected.getRemainingBalls(), TOTAL_PINS);
         assertEquals(expected.getCurrThrow(), 2);
         assertFalse(expected.isThrowComplete());
-        assertArrayEquals(expected.getScores(), new int[]{ TOTAL_PINS, TOTAL_PINS, -1 });
+        assertArrayEquals(expected.getScores(), new int[] { TOTAL_PINS, TOTAL_PINS, -1 });
 
         expected.throwBall(TOTAL_PINS);
 
         assertEquals(expected.getRemainingBalls(), 0);
         assertEquals(expected.getCurrThrow(), 3);
         assertTrue(expected.isThrowComplete());
-        assertArrayEquals(expected.getScores(), new int[]{ TOTAL_PINS, TOTAL_PINS, TOTAL_PINS });
+        assertArrayEquals(expected.getScores(), new int[] { TOTAL_PINS, TOTAL_PINS, TOTAL_PINS });
+    }
+
+
+    @Test
+    void should_construct_spare_and_strike_given_last_frame() {
+
+        LastFrame expected = new LastFrame();
+
+        int firstScore = 6;
+        int secondScore = TOTAL_PINS - firstScore;
+        int thirdScore = TOTAL_PINS;
+
+        expected.throwBall(firstScore);
+
+        assertEquals(expected.getRemainingBalls(), secondScore);
+        assertEquals(expected.getCurrThrow(), 1);
+        assertFalse(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[]{ firstScore, -1, -1 });
+
+        expected.throwBall(secondScore);
+
+        assertEquals(expected.getRemainingBalls(), TOTAL_PINS);
+        assertEquals(expected.getCurrThrow(), 2);
+        assertFalse(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[]{ firstScore, secondScore, -1 });
+
+        expected.throwBall(thirdScore);
+
+        assertEquals(expected.getRemainingBalls(), 0);
+        assertEquals(expected.getCurrThrow(), 3);
+        assertTrue(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[] { firstScore, secondScore, thirdScore });
+    }
+
+
+    @Test
+    void should_construct_spare_and_fail_given_last_frame() {
+
+        LastFrame expected = new LastFrame();
+
+        int firstScore = 6;
+        int secondScore = TOTAL_PINS - firstScore;
+        int thirdScore = 8;
+
+        expected.throwBall(firstScore);
+
+        assertEquals(expected.getRemainingBalls(), secondScore);
+        assertEquals(expected.getCurrThrow(), 1);
+        assertFalse(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[]{ firstScore, -1, -1 });
+
+        expected.throwBall(secondScore);
+
+        assertEquals(expected.getRemainingBalls(), TOTAL_PINS);
+        assertEquals(expected.getCurrThrow(), 2);
+        assertFalse(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[]{ firstScore, secondScore, -1 });
+
+        expected.throwBall(thirdScore);
+
+        assertEquals(expected.getRemainingBalls(), TOTAL_PINS - thirdScore);
+        assertEquals(expected.getCurrThrow(), 3);
+        assertTrue(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[] { firstScore, secondScore, thirdScore });
+    }
+
+
+    @Test
+    void should_construct_failed_frame_given_last_frame() {
+
+        LastFrame expected = new LastFrame();
+
+        int firstScore = 6;
+        int secondScore = 1;
+
+        expected.throwBall(firstScore);
+
+        assertEquals(expected.getRemainingBalls(), TOTAL_PINS - firstScore);
+        assertEquals(expected.getCurrThrow(), 1);
+        assertFalse(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[]{ firstScore, -1, -1 });
+
+        expected.throwBall(secondScore);
+
+        assertEquals(expected.getRemainingBalls(), TOTAL_PINS - firstScore - secondScore);
+        assertEquals(expected.getCurrThrow(), 2);
+        assertTrue(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[]{ firstScore, secondScore, -1 });
+    }
+
+
+    @Test
+    void should_throw_illegal_argument_exception_when_striking_negative_pins_given_last_frame() {
+
+        LastFrame expected = new LastFrame();
+
+        assertThrows(IllegalArgumentException.class,
+                () -> expected.throwBall(-1),
+                STRIKING_NEGATIVE_PINS_MSG);
+    }
+
+
+    @Test
+    void should_throw_illegal_argument_exception_when_striking_too_many_pins_given_last_frame() {
+
+        LastFrame expected1 = new LastFrame();
+        expected1.throwBall(5);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> expected1.throwBall(6),
+                STRIKING_TOO_MANY_PINS_MSG);
+
+        LastFrame expected2 = new LastFrame();
+
+        assertThrows(IllegalArgumentException.class,
+                () -> expected2.throwBall(11),
+                STRIKING_TOO_MANY_PINS_MSG);
+    }
+
+
+    @Test
+    void should_throw_illegal_state_exception_when_throw_after_frame_completed_given_last_frame() {
+
+        LastFrame expected1 = new LastFrame();
+
+        expected1.throwBall(TOTAL_PINS);
+        expected1.throwBall(TOTAL_PINS);
+        expected1.throwBall(TOTAL_PINS);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected1.throwBall(2),
+                THROW_MORE_THAN_ALLOWED_TIMES_MSG);
+
+
+        LastFrame expected2 = new LastFrame();
+
+        expected2.throwBall(TOTAL_PINS);
+        expected2.throwBall(TOTAL_PINS);
+        expected2.throwBall(2);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected2.throwBall(2),
+                THROW_MORE_THAN_ALLOWED_TIMES_MSG);
+
+
+        LastFrame expected3 = new LastFrame();
+
+        int firstScore3 = 5;
+
+        expected3.throwBall(firstScore3);
+        expected3.throwBall(TOTAL_PINS - firstScore3);
+        expected3.throwBall(TOTAL_PINS);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected3.throwBall(2),
+                THROW_MORE_THAN_ALLOWED_TIMES_MSG);
+
+
+        LastFrame expected4 = new LastFrame();
+
+        int firstScore4 = 5;
+
+        expected4.throwBall(firstScore4);
+        expected4.throwBall(TOTAL_PINS - firstScore4);
+        expected4.throwBall(2);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected4.throwBall(2),
+                THROW_MORE_THAN_ALLOWED_TIMES_MSG);
+
+
+        LastFrame expected5 = new LastFrame();
+
+        int firstScore5 = 5;
+        int secondScore5 = 2;
+
+        expected5.throwBall(firstScore5);
+        expected5.throwBall(secondScore5);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected5.throwBall(2),
+                THROW_MORE_THAN_ALLOWED_TIMES_MSG);
     }
 
 }
