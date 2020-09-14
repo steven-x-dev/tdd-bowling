@@ -139,4 +139,32 @@ class FrameTest {
         assertArrayEquals(expected.getScores(), new int[] { -1, -1, -1 });
     }
 
+
+    @Test
+    void should_construct_three_strikes_given_last_frame() {
+
+        Frame expected = new LastFrame();
+
+        expected.throwBall(TOTAL_PINS);
+
+        assertEquals(expected.getRemainingBalls(), TOTAL_PINS);
+        assertEquals(expected.getCurrThrow(), 1);
+        assertFalse(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[]{ TOTAL_PINS, -1, -1 });
+
+        expected.throwBall(TOTAL_PINS);
+
+        assertEquals(expected.getRemainingBalls(), TOTAL_PINS);
+        assertEquals(expected.getCurrThrow(), 2);
+        assertFalse(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[]{ TOTAL_PINS, TOTAL_PINS, -1 });
+
+        expected.throwBall(TOTAL_PINS);
+
+        assertEquals(expected.getRemainingBalls(), 0);
+        assertEquals(expected.getCurrThrow(), 3);
+        assertTrue(expected.isThrowComplete());
+        assertArrayEquals(expected.getScores(), new int[]{ TOTAL_PINS, TOTAL_PINS, TOTAL_PINS });
+    }
+
 }
