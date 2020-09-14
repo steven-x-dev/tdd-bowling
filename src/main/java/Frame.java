@@ -55,7 +55,7 @@ class Frame extends AbstractFrame {
 
         strike(pinsDown);
 
-        throwComplete = checkFrameComplete();
+        checkFrameComplete();
 
         if (throwComplete) {
             if (currThrow == 1) {
@@ -70,8 +70,8 @@ class Frame extends AbstractFrame {
 
 
     @Override
-    protected boolean checkFrameComplete() {
-        return remainingBalls == 0 || currThrow == MAX_THROWS;
+    protected void checkFrameComplete() {
+        throwComplete = remainingBalls == 0 || currThrow == MAX_THROWS;
     }
 
 

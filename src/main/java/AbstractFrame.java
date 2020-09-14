@@ -56,7 +56,7 @@ public abstract class AbstractFrame {
     protected abstract void throwBall(int pinsDown);
 
 
-    protected abstract boolean checkFrameComplete();
+    protected abstract void checkFrameComplete();
 
 
     int getRemainingBalls() {
