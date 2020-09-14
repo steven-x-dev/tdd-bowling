@@ -1,5 +1,10 @@
 class Frame {
 
+
+    private static final int TOTAL_PINS = 10;
+    private static final int ADDITIONAL_SCORING_THROWS = 2;
+
+
     private int remainingBalls;
     private int[] scores;
     private int currThrow;
@@ -8,12 +13,13 @@ class Frame {
 
 
     Frame() {
-        remainingBalls = 10;
-        scores = new int[] { -1, -1, -1 } ;
+        remainingBalls = TOTAL_PINS;
+        scores = new int[] { -1, -1, -1 };
         currThrow = 0;
         throwComplete = false;
-        remainingScoringThrows = 2;
+        remainingScoringThrows = ADDITIONAL_SCORING_THROWS;
     }
+
 
     int getRemainingBalls() {
         return remainingBalls;
@@ -36,19 +42,22 @@ class Frame {
     }
 
     void throwBall(int pinsDown) {
-        if (pinsDown == 10) {
-            remainingBalls -= pinsDown;
-            scores[currThrow] = pinsDown;
-            currThrow++;
+
+        if (throwComplete)
+            throw new IllegalStateException("you can't continue a frame which has already been completed");
+
+        if (pinsDown > remainingBalls)
+            throw new IllegalArgumentException("you can't strike down more pins than what's in this frame");
+
+        remainingBalls -= pinsDown;
+        scores[currThrow] = pinsDown;
+        currThrow++;
+
+        if (remainingBalls == 0)
             throwComplete = true;
-        } else {
-            remainingBalls -= pinsDown;
-            scores[currThrow] = pinsDown;
-            currThrow++;
-            throwComplete = true;
-            if (currThrow > 1) {
-                remainingScoringThrows--;
-            }
+
+        if (currThrow > 1) {
+            remainingScoringThrows--;
         }
     }
 }
