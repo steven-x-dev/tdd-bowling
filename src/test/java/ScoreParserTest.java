@@ -38,5 +38,20 @@ class ScoreParserTest {
             }
         }
     }
+
+
+    @Test
+    void should_all_frame_scores_calculated_and_total_score_calculated_given_line_input() {
+
+        assertEquals(ScoreParser.parseLineIntoTotalScore(INPUTS[0]), 0);
+
+        List<AbstractFrame> frames1 = ScoreParser.parseLineIntoFrames(INPUTS[0]);
+        frames1.forEach(f -> assertEquals(f.getTotalScore(), 0));
+
+        assertEquals(ScoreParser.parseLineIntoTotalScore(INPUTS[1]), 300);
+
+        List<AbstractFrame> frames2 = ScoreParser.parseLineIntoFrames(INPUTS[1]);
+        frames2.forEach(f -> assertEquals(f.getTotalScore(), 30));
+    }
     
 }

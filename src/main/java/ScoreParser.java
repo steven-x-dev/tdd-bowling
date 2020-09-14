@@ -16,7 +16,14 @@ public class ScoreParser {
 
 
 
-    static List<AbstractFrame> parseLineIntoFrames(String line) {
+    public static int parseLineIntoTotalScore(String line) {
+        List<AbstractFrame> frames = parseLineIntoFrames(line);
+        return frames.stream().mapToInt(AbstractFrame::getTotalScore).sum();
+    }
+
+
+
+    public static List<AbstractFrame> parseLineIntoFrames(String line) {
 
         int[] scores = getScores(line);
         List<AbstractFrame> frames = new ArrayList<>(10);
