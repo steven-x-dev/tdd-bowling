@@ -53,11 +53,15 @@ class Frame {
         scores[currThrow] = pinsDown;
         currThrow++;
 
-        if (remainingBalls == 0)
+        if (remainingBalls == 0 || currThrow == 2)
             throwComplete = true;
 
-        if (currThrow > 1) {
-            remainingScoringThrows--;
+        if (remainingBalls > 0) {
+            if (currThrow == 1) {
+                remainingScoringThrows = 1;
+            } else {
+                remainingScoringThrows = 0;
+            }
         }
     }
 }

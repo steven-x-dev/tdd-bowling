@@ -52,4 +52,23 @@ class FrameTest {
         assertEquals(expected.getRemainingScoringThrows(), ADDITIONAL_SCORING_THROWS - 1);
         assertArrayEquals(expected.getScores(), new int[] { firstScore, TOTAL_PINS - firstScore, -1 });
     }
+
+
+    @Test
+    void should_construct_failed_frame() {
+
+        Frame expected = new Frame();
+
+        int firstScore = 6;
+        int secondScore = 3;
+
+        expected.throwBall(firstScore);
+        expected.throwBall(secondScore);
+
+        assertEquals(expected.getRemainingBalls(), TOTAL_PINS - firstScore - secondScore);
+        assertEquals(expected.getCurrThrow(), 2);
+        assertTrue(expected.isThrowComplete());
+        assertEquals(expected.getRemainingScoringThrows(), 0);
+        assertArrayEquals(expected.getScores(), new int[] { firstScore, secondScore, -1 });
+    }
 }
