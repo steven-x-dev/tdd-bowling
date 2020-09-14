@@ -10,6 +10,15 @@ class FrameTest {
     private static final int ADDITIONAL_SCORING_THROWS_FOR_SPARE = 1;
     private static final int ADDITIONAL_SCORING_THROWS_FOR_FAILED = 0;
 
+    private static final String THROW_MORE_THAN_TWO_TIMES_MSG =
+            "you can't continue a frame which has already been completed";
+
+    private static final String STRIKING_NEGATIVE_PINS_MSG =
+            "you can't strike down a negative number of pins";
+
+    private static final String STRIKING_TOO_MANY_PINS_MSG =
+            "you can't strike down more pins than what's in this frame";
+
 
     @Test
     void should_construct_empty_frame() {
@@ -73,4 +82,48 @@ class FrameTest {
         assertEquals(expected.getRemainingScoringThrows(), ADDITIONAL_SCORING_THROWS_FOR_FAILED);
         assertArrayEquals(expected.getScores(), new int[] { firstScore, secondScore });
     }
+
+
+    @Test
+    void should_throw_illegal_argument_exception_when_striking_negative_pins() {
+
+        Frame expected = new Frame();
+
+        assertThrows(IllegalStateException.class,
+                () -> expected.throwBall(-1),
+                STRIKING_NEGATIVE_PINS_MSG);
+    }
+
+
+    @Test
+    void should_throw_illegal_argument_exception_when_striking_too_many_pins() {
+
+        Frame expected1 = new Frame();
+        expected1.throwBall(5);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected1.throwBall(6),
+                STRIKING_TOO_MANY_PINS_MSG);
+
+        Frame expected2 = new Frame();
+
+        assertThrows(IllegalStateException.class,
+                () -> expected2.throwBall(11),
+                STRIKING_TOO_MANY_PINS_MSG);
+    }
+
+
+    @Test
+    void should_throw_illegal_state_exception_when_throw_three_times() {
+
+        Frame expected = new Frame();
+
+        expected.throwBall(5);
+        expected.throwBall(2);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected.throwBall(2),
+                THROW_MORE_THAN_TWO_TIMES_MSG);
+    }
+
 }
