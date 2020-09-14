@@ -2,7 +2,9 @@ class Frame {
 
 
     private static final int TOTAL_PINS = 10;
-    private static final int ADDITIONAL_SCORING_THROWS = 2;
+    private static final int ADDITIONAL_SCORING_THROWS_FOR_STRIKE = 2;
+    private static final int ADDITIONAL_SCORING_THROWS_FOR_SPARE = 1;
+    private static final int ADDITIONAL_SCORING_THROWS_FOR_FAILED = 0;
 
 
     private int remainingBalls;
@@ -14,10 +16,10 @@ class Frame {
 
     Frame() {
         remainingBalls = TOTAL_PINS;
-        scores = new int[] { -1, -1, -1 };
+        scores = new int[] { -1, -1 };
         currThrow = 0;
         throwComplete = false;
-        remainingScoringThrows = ADDITIONAL_SCORING_THROWS;
+        remainingScoringThrows = -1;
     }
 
 
@@ -53,14 +55,17 @@ class Frame {
         scores[currThrow] = pinsDown;
         currThrow++;
 
-        if (remainingBalls == 0 || currThrow == 2)
+        if (remainingBalls == 0 || currThrow == 2) {
             throwComplete = true;
+        }
 
-        if (remainingBalls > 0) {
+        if (throwComplete) {
             if (currThrow == 1) {
-                remainingScoringThrows = 1;
+                remainingScoringThrows = ADDITIONAL_SCORING_THROWS_FOR_STRIKE;
+            } else if (remainingBalls == 0) {
+                remainingScoringThrows = ADDITIONAL_SCORING_THROWS_FOR_SPARE;
             } else {
-                remainingScoringThrows = 0;
+                remainingScoringThrows = ADDITIONAL_SCORING_THROWS_FOR_FAILED;
             }
         }
     }
