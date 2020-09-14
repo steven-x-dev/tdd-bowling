@@ -21,6 +21,9 @@ class FrameTest {
     private static final String STRIKING_TOO_MANY_PINS_MSG =
             "you can't strike down more pins than what's in this frame";
 
+    private static final String NOT_ENOUGH_SCORING_THROWS_MSG =
+            "you can't add more scores to this frame";
+
 
     @Test
     void should_construct_empty_frame() {
@@ -377,6 +380,61 @@ class FrameTest {
         assertThrows(IllegalStateException.class,
                 () -> expected5.throwBall(2),
                 THROW_MORE_THAN_ALLOWED_TIMES_MSG);
+    }
+
+
+    @Test
+    void should_add_additional_score_two_times_and_throw_exception_for_third_time_given_strike_frame() {
+
+        Frame expected = new Frame();
+        expected.throwBall(TOTAL_PINS);
+
+        int firstAdded = 8;
+        int secondAdded = 10;
+
+        expected.addAdditionalScore(firstAdded);
+        assertEquals(expected.getTotalScore(), TOTAL_PINS + firstAdded);
+
+        expected.addAdditionalScore(secondAdded);
+        assertEquals(expected.getTotalScore(), TOTAL_PINS + firstAdded + secondAdded);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected.addAdditionalScore(2),
+                NOT_ENOUGH_SCORING_THROWS_MSG);
+    }
+
+
+    @Test
+    void should_add_additional_score_once_and_throw_exception_for_second_time_given_spare_frame() {
+
+        Frame expected = new Frame();
+        int firstScore = 4;
+        expected.throwBall(firstScore);
+        expected.throwBall(TOTAL_PINS - firstScore);
+
+        int added = 8;
+
+        expected.addAdditionalScore(added);
+        assertEquals(expected.getTotalScore(), TOTAL_PINS + added);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected.addAdditionalScore(2),
+                NOT_ENOUGH_SCORING_THROWS_MSG);
+    }
+
+
+    @Test
+    void should_throw_exception_when_adding_score_given_failed_frame() {
+
+        Frame expected = new Frame();
+        int firstScore = 4;
+        int secondScore = 3;
+        expected.throwBall(firstScore);
+        expected.throwBall(secondScore);
+
+        assertThrows(IllegalStateException.class,
+                () -> expected.addAdditionalScore(2),
+                NOT_ENOUGH_SCORING_THROWS_MSG);
     }
 
 }
