@@ -32,6 +32,7 @@ class FrameTest {
         assertFalse(expected.isThrowComplete());
         assertEquals(expected.getRemainingScoringThrows(), -1);
         assertArrayEquals(expected.getScores(), new int[] { -1, -1 });
+        assertEquals(expected.getTotalScore(), 0);
     }
 
 
@@ -46,6 +47,7 @@ class FrameTest {
         assertTrue(expected.isThrowComplete());
         assertEquals(expected.getRemainingScoringThrows(), ADDITIONAL_SCORING_THROWS_FOR_STRIKE);
         assertArrayEquals(expected.getScores(), new int[] { TOTAL_PINS, -1 });
+        assertEquals(expected.getTotalScore(), TOTAL_PINS);
     }
 
 
@@ -64,6 +66,7 @@ class FrameTest {
         assertTrue(expected.isThrowComplete());
         assertEquals(expected.getRemainingScoringThrows(), ADDITIONAL_SCORING_THROWS_FOR_SPARE);
         assertArrayEquals(expected.getScores(), new int[] { firstScore, TOTAL_PINS - firstScore });
+        assertEquals(expected.getTotalScore(), TOTAL_PINS);
     }
 
 
@@ -83,6 +86,7 @@ class FrameTest {
         assertTrue(expected.isThrowComplete());
         assertEquals(expected.getRemainingScoringThrows(), ADDITIONAL_SCORING_THROWS_FOR_FAILED);
         assertArrayEquals(expected.getScores(), new int[] { firstScore, secondScore });
+        assertEquals(expected.getTotalScore(), firstScore + secondScore);
     }
 
 
@@ -151,6 +155,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 0);
         assertFalse(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[] { -1, -1, -1 });
+        assertEquals(expected.getTotalScore(), 0);
     }
 
 
@@ -165,6 +170,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 1);
         assertFalse(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[] { TOTAL_PINS, -1, -1 });
+        assertEquals(expected.getTotalScore(), TOTAL_PINS);
 
         expected.throwBall(TOTAL_PINS);
 
@@ -172,6 +178,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 2);
         assertFalse(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[] { TOTAL_PINS, TOTAL_PINS, -1 });
+        assertEquals(expected.getTotalScore(), TOTAL_PINS * 2);
 
         expected.throwBall(TOTAL_PINS);
 
@@ -179,6 +186,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 3);
         assertTrue(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[] { TOTAL_PINS, TOTAL_PINS, TOTAL_PINS });
+        assertEquals(expected.getTotalScore(), TOTAL_PINS * 3);
     }
 
 
@@ -197,6 +205,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 1);
         assertFalse(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[]{ firstScore, -1, -1 });
+        assertEquals(expected.getTotalScore(), firstScore);
 
         expected.throwBall(secondScore);
 
@@ -204,6 +213,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 2);
         assertFalse(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[]{ firstScore, secondScore, -1 });
+        assertEquals(expected.getTotalScore(), TOTAL_PINS);
 
         expected.throwBall(thirdScore);
 
@@ -211,6 +221,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 3);
         assertTrue(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[] { firstScore, secondScore, thirdScore });
+        assertEquals(expected.getTotalScore(), TOTAL_PINS * 2);
     }
 
 
@@ -229,6 +240,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 1);
         assertFalse(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[]{ firstScore, -1, -1 });
+        assertEquals(expected.getTotalScore(), firstScore);
 
         expected.throwBall(secondScore);
 
@@ -236,6 +248,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 2);
         assertFalse(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[]{ firstScore, secondScore, -1 });
+        assertEquals(expected.getTotalScore(), TOTAL_PINS);
 
         expected.throwBall(thirdScore);
 
@@ -243,6 +256,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 3);
         assertTrue(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[] { firstScore, secondScore, thirdScore });
+        assertEquals(expected.getTotalScore(), TOTAL_PINS + thirdScore);
     }
 
 
@@ -260,6 +274,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 1);
         assertFalse(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[]{ firstScore, -1, -1 });
+        assertEquals(expected.getTotalScore(), firstScore);
 
         expected.throwBall(secondScore);
 
@@ -267,6 +282,7 @@ class FrameTest {
         assertEquals(expected.getCurrThrow(), 2);
         assertTrue(expected.isThrowComplete());
         assertArrayEquals(expected.getScores(), new int[]{ firstScore, secondScore, -1 });
+        assertEquals(expected.getTotalScore(), firstScore + secondScore);
     }
 
 

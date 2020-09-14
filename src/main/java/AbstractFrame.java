@@ -28,6 +28,7 @@ public abstract class AbstractFrame {
         remainingBalls = TOTAL_PINS;
         currThrow = 0;
         throwComplete = false;
+        totalScore = 0;
     }
 
 
@@ -48,6 +49,7 @@ public abstract class AbstractFrame {
         remainingBalls -= pinsDown;
         scores[currThrow] = pinsDown;
         currThrow++;
+        totalScore += pinsDown;
     }
 
 

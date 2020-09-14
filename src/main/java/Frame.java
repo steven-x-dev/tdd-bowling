@@ -6,6 +6,15 @@ class Frame extends AbstractFrame {
     private static final int ADDITIONAL_SCORING_THROWS_FOR_SPARE = 1;
     private static final int ADDITIONAL_SCORING_THROWS_FOR_FAILED = 0;
 
+    private static final String ADDING_ILLEGAL_SCORE_MSG =
+            "you can't add a negative score or a score higher than " + TOTAL_PINS;
+
+    private static final String FRAME_NOT_COMPLETED_MSG =
+            "you can't add a score from a later throw when this frame hasn't been completed";
+
+    private static final String NOT_ENOUGH_SCORING_THROWS_MSG =
+            "you can't add more scores to this frame";
+
 
     private int remainingScoringThrows;
 
@@ -14,6 +23,28 @@ class Frame extends AbstractFrame {
         super();
         scores = new int[] { -1, -1 };
         remainingScoringThrows = -1;
+    }
+
+
+    void addAdditionalScore(int score) {
+
+        checkScoreInput(score);
+
+        totalScore += score;
+        remainingScoringThrows--;
+    }
+
+
+    private void checkScoreInput(int score) {
+
+        if (score < 0 || score > TOTAL_PINS)
+            throw new IllegalArgumentException(ADDING_ILLEGAL_SCORE_MSG);
+
+        if (remainingScoringThrows == -1)
+            throw new IllegalStateException(FRAME_NOT_COMPLETED_MSG);
+
+        if (remainingScoringThrows < 1)
+            throw new IllegalStateException(NOT_ENOUGH_SCORING_THROWS_MSG);
     }
 
 
