@@ -60,7 +60,7 @@ class Frame extends AbstractFrame {
         if (throwComplete) {
             if (currThrow == 1) {
                 remainingScoringThrows = ADDITIONAL_SCORING_THROWS_FOR_STRIKE;
-            } else if (remainingBalls == 0) {
+            } else if (remainingPins == 0) {
                 remainingScoringThrows = ADDITIONAL_SCORING_THROWS_FOR_SPARE;
             } else {
                 remainingScoringThrows = ADDITIONAL_SCORING_THROWS_FOR_FAILED;
@@ -71,7 +71,7 @@ class Frame extends AbstractFrame {
 
     @Override
     protected void checkFrameComplete() {
-        throwComplete = remainingBalls == 0 || currThrow == MAX_THROWS;
+        throwComplete = remainingPins == 0 || currThrow == MAX_THROWS;
     }
 
 

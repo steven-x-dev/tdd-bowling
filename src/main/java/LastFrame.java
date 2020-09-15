@@ -17,8 +17,8 @@ class LastFrame extends AbstractFrame {
 
         checkFrameComplete();
 
-        if (remainingBalls == 0 && currThrow < MAX_THROWS) {
-            remainingBalls = TOTAL_PINS;
+        if (remainingPins == 0 && currThrow < MAX_THROWS) {
+            remainingPins = TOTAL_PINS;
         }
     }
 
@@ -26,7 +26,7 @@ class LastFrame extends AbstractFrame {
     @Override
     protected void checkFrameComplete() {
         throwComplete = (currThrow == MAX_THROWS ||
-                (currThrow == (MAX_THROWS - 1) && remainingBalls > 0));
+                (currThrow == (MAX_THROWS - 1) && remainingPins > 0));
     }
 
 }

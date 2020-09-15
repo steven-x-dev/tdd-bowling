@@ -15,7 +15,7 @@ public abstract class AbstractFrame {
 
 
 
-    protected int remainingBalls;
+    protected int remainingPins;
     protected int[] scores;
 
     protected int currThrow;
@@ -25,7 +25,7 @@ public abstract class AbstractFrame {
 
 
     protected AbstractFrame() {
-        remainingBalls = TOTAL_PINS;
+        remainingPins = TOTAL_PINS;
         currThrow = 0;
         throwComplete = false;
         totalScore = 0;
@@ -40,13 +40,13 @@ public abstract class AbstractFrame {
         if (pinsDown < 0)
             throw new IllegalArgumentException(STRIKING_NEGATIVE_PINS_MSG);
 
-        if (pinsDown > remainingBalls)
+        if (pinsDown > remainingPins)
             throw new IllegalArgumentException(STRIKING_TOO_MANY_PINS_MSG);
     }
 
 
     protected void strike(int pinsDown) {
-        remainingBalls -= pinsDown;
+        remainingPins -= pinsDown;
         scores[currThrow] = pinsDown;
         currThrow++;
         totalScore += pinsDown;
@@ -59,8 +59,8 @@ public abstract class AbstractFrame {
     protected abstract void checkFrameComplete();
 
 
-    int getRemainingBalls() {
-        return remainingBalls;
+    int getRemainingPins() {
+        return remainingPins;
     }
 
     int[] getScores() {
